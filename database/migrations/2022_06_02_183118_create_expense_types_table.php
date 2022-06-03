@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\ExpenseType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,15 +14,21 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('expense_types', function (Blueprint $table) {
             $table->id();
-            $table->string('username')->unique();
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
+            $table->string('type');
             $table->timestamps();
         });
+
+        $monthly = new ExpenseType([
+            'type' => 'Monthly'
+        ]);
+        $monthly->save();
+
+        $type = new ExpenseType([
+            'type' => 'One Off'
+        ]);
+        $type->save();
     }
 
     /**
@@ -31,6 +38,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('expense_types');
     }
 };
