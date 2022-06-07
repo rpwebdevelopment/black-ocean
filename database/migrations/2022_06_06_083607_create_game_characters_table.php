@@ -13,14 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('ship_fuels', function (Blueprint $table) {
+        Schema::create('game_characters', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('ship_id');
-            $table->integer('capacity');
-            $table->integer('current');
+            $table->unsignedBigInteger('game_id');
+            $table->unsignedBigInteger('character_id');
             $table->timestamps();
 
-            $table->foreign('ship_id')->references('id')->on('ships');
+            $table->foreign('game_id')->references('id')->on('games');
+            $table->foreign('character_id')->references('id')->on('characters');
         });
     }
 
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ship_fuels');
+        Schema::dropIfExists('game_characters');
     }
 };

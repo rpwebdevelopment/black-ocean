@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Mortgage;
 use App\Models\Ship;
-use App\Models\ShipFuel;
+use App\Models\ShipDetail;
 use App\Models\ShipFund;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
@@ -15,17 +15,17 @@ class ShipRepository
     {
     }
 
+    public function getShipDetails(): HasOne|ShipDetail
+    {
+        return $this->ship
+            ->details()
+            ->first();
+    }
+
     public function getShipFund(): HasOne|ShipFund
     {
         return $this->ship
             ->fund()
-            ->first();
-    }
-
-    public function getShipFuel(): HasOne|ShipFuel
-    {
-        return $this->ship
-            ->fuel()
             ->first();
     }
 

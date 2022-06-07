@@ -5,13 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ShipFuel extends Model
+class CharacterAssociate extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'ship_id',
-        'capacity',
-        'current',
+        'character_id',
+        'type',
+        'name',
+        'who',
+        'how',
     ];
 }

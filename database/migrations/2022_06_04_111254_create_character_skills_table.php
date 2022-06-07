@@ -13,11 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('ships', function (Blueprint $table) {
+        Schema::create('character_skills', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->boolean('active')->dafault(true);
+            $table->unsignedBigInteger('character_id');
+            $table->unsignedBigInteger('skill_id');
+            $table->integer('level')->default(0);
             $table->timestamps();
+
+            $table->foreign('character_id')->references('id')->on('characters');
+            $table->foreign('skill_id')->references('id')->on('skills');
         });
     }
 
@@ -28,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ships');
+        Schema::dropIfExists('character_skills');
     }
 };

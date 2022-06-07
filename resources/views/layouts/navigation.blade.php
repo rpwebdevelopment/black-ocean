@@ -16,13 +16,17 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
 
-                    <x-nav-link :href="route('friend-search')" :active="request()->routeIs('friend-search')">
-                        {{ __('Friend Search') }}
+                    <x-nav-link :href="route('friends')" :active="request()->routeIs('friends')">
+                        {{ __('Friends') }}
                     </x-nav-link>
 
-                    <x-nav-link :href="route('ship')" :active="request()->routeIs('ship')">
-                        {{ __('Ship') }}
+                    <x-nav-link :href="route('games')" :active="request()->routeIs('games')">
+                        {{ __('Games') }}
                     </x-nav-link>
+
+{{--                    <x-nav-link :href="route('character')" :active="request()->routeIs('character')">--}}
+{{--                        {{ __('Character') }}--}}
+{{--                    </x-nav-link>--}}
                 </div>
             </div>
 

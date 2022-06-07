@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\CharacterController;
+use App\Http\Controllers\GameController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,16 +19,27 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+Route::middleware([\App\Http\Middleware\Authenticate::class])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
 
-Route::get('/search', function () {
-    return view('search');
-})->middleware(['auth'])->name('friend-search');
+    Route::get('/friends', function () {
+        return view('friends');
+    })->name('friends');
 
-Route::get('/ship', function () {
-    return view('ship');
-})->middleware(['auth'])->name('ship');
+    Route::get('/ship', function () {
+        return view('ship');
+    })->name('ship');
+
+    Route::get('/games', [GameController::class, 'index'])
+        ->name('games');
+
+    Route::get('/games/{id}', [GameController::class, 'show'])
+        ->name('game');
+
+    Route::get('/character/{id}', [CharacterController::class, 'show'])
+        ->name('character');
+});
 
 require __DIR__.'/auth.php';

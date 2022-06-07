@@ -32,6 +32,12 @@ return new class extends Migration
             'ppu' => 100,
         ]);
         $unrefined->save();
+
+        $unrefined = new FuelType([
+            'name' => 'Free - Self Refined',
+            'ppu' => 0,
+        ]);
+        $unrefined->save();
     }
 
     /**

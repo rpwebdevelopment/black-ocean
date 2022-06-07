@@ -15,6 +15,11 @@ class Ship extends Model
         'name',
     ];
 
+    public function details(): hasOne
+    {
+        return $this->hasOne(ShipDetail::class, 'ship_id', 'id');
+    }
+
     public function expenses(): hasMany
     {
         return $this->hasMany(Expense::class, 'ship_id', 'id');
@@ -30,13 +35,13 @@ class Ship extends Model
         return $this->hasOne(ShipFund::class, 'ship_id', 'id');
     }
 
-    public function fuel(): hasOne
-    {
-        return $this->hasOne(ShipFuel::class, 'ship_id', 'id');
-    }
-
     public function berths(): hasMany
     {
         return $this->hasMany(ShipBerth::class, 'ship_id', 'id');
+    }
+
+    public function location(): hasOne
+    {
+        return $this->hasOne(ShipLoc::class, 'ship_id', 'id');
     }
 }
