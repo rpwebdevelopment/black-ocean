@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CharacterController;
 use App\Http\Controllers\GameController;
+use App\Http\Middleware\Authenticate;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,7 +20,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::middleware([\App\Http\Middleware\Authenticate::class])->group(function () {
+Route::middleware([Authenticate::class])->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
@@ -36,6 +37,7 @@ Route::middleware([\App\Http\Middleware\Authenticate::class])->group(function ()
         ->name('games');
 
     Route::get('/games/{id}', [GameController::class, 'show'])
+        ->middleware(['game.auth'])
         ->name('game');
 
     Route::get('/character/{id}', [CharacterController::class, 'show'])

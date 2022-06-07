@@ -26,4 +26,12 @@ class GameUser extends Model
     {
         return $this->hasOne(User::class, 'id', 'user_id');
     }
+
+    public function userHasAccess(int $userId, int $gameId): bool
+    {
+        return $this->newQuery()
+            ->where('game_id', '=', $gameId)
+            ->where('user_id', '=', $userId)
+            ->exists();
+    }
 }
