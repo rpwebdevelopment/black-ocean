@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Support\Collection;
 
 class Game extends Model
 {
@@ -19,9 +21,19 @@ class Game extends Model
         return $this->hasMany(GameShip::class, 'game_id', 'id');
     }
 
+    public function ships(): HasManyThrough
+    {
+        return $this->hasManyThrough(Ship::class, GameShip::class, 'game_id', 'id', 'id', 'ship_id');
+    }
+
     public function gameCharacters(): HasMany
     {
         return $this->hasMany(GameCharacter::class, 'game_id', 'id');
+    }
+
+    public function characters(): HasManyThrough
+    {
+        return $this->hasManyThrough(Character::class, GameCharacter::class, 'game_id', 'id', 'id', 'character_id');
     }
 
     public function gameUsers(): HasMany
@@ -29,25 +41,38 @@ class Game extends Model
         return $this->hasMany(GameUser::class, 'game_id', 'id');
     }
 
-    public function getGM(): GameUser
+    public function users(): HasManyThrough
     {
-        return $this->gameUsers()
+        return $this->hasManyThrough(User::class, GameUser::class, 'game_id', 'id', 'id', 'user_id');
+    }
+
+    public function getGM(): User
+    {
+        return $this->users()
             ->where('is_gm', '=', true)
             ->first();
     }
 
+    public function getPlayers(): ?Collection
+    {
+        return $this->users()
+            ->where('is_gm', '=', false)
+            ->get();
+    }
+
+    public function playerIdArray(): array
+    {
+        return $this->users()
+            ->where('is_gm', '=', false)
+            ->pluck('user_id')
+            ->toArray();
+    }
+
     public function getAllUsers(): array
     {
-        $users = [];
-        $gameUsers = $this->gameUsers()->get();
-        foreach ($gameUsers as $gameUser) {
-            if ($gameUser->is_gm) {
-                $users['gm'] = $gameUser->user()->first();
-            } else {
-                $users['players'][] = $gameUser->user()->first();
-            }
-        }
-
-        return $users;
+        return [
+            'gm' => $this->getGM(),
+            'players' => $this->getPlayers(),
+        ];
     }
 }

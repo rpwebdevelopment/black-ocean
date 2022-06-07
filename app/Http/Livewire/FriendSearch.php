@@ -15,7 +15,7 @@ class FriendSearch extends Component
     private User $currentUser;
     private Friend $friendModel;
     public ?Collection $users;
-    public array $friends = [];
+    public ?Collection $friends;
     public ?Collection $pendingRequests;
     public string $userInput = '';
 
@@ -42,13 +42,8 @@ class FriendSearch extends Component
     public function getData(): void
     {
         $this->currentUser = Auth::user();
-        $this->pendingRequests = FriendRequest::query()
-            ->where('for_user_id', '=', $this->currentUser->id)
-            ->where('rejected', '=', false)
-            ->where('accepted', '=', false)
-            ->get();
-
-        $this->friends = $this->friendModel->getUserFriends();
+        $this->pendingRequests = $this->currentUser->activeFriendRequests()->get();
+        $this->friends = $this->currentUser->friends()->get();
     }
 
     public function getUsers(): void
@@ -63,13 +58,14 @@ class FriendSearch extends Component
             $this->userInput
         );
 
+
         $this->users = User::query()
             ->where('id', '<>', $this->currentUser->id)
             ->where(function($query) use ($searchString) {
                 $query->where('username', 'LIKE', $searchString)
                     ->orWhere('email', 'LIKE', $searchString);
             })
-            ->whereNotIn('id', $this->friendModel->getCurrentFriendIds())
+            ->whereNotIn('id', $this->currentUser->friendIdArray())
             ->get();
     }
 

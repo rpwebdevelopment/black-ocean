@@ -17,15 +17,11 @@ class GameController extends Controller
     {
         $game = Game::find($id);
         $currentUser = Auth::user();
-        $isGM = $game->getGM()->user_id === $currentUser->id;
+        $isGM = $game->getGM()->id === $currentUser->id;
 
-        $gameShip = GameShip::query()
-            ->where('game_id', '=', $game->id)
+        $ship = $game->ships()
+            ->where('active', '=', true)
             ->first();
-
-        $ship = $gameShip?->ship()
-                ->where('active', '=', true)
-                ->first();
 
         return view(
             'game',
